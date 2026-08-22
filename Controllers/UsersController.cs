@@ -97,5 +97,22 @@ namespace Managment_System_API.Controllers
                 message = "User deleted successfully."
             });
         }
+
+        //// GET: api/Users/5
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> ShowUser(int id)
+        //{
+        //    var user = await _userService.ShowUserAsync(id);
+
+        //    if (user == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            message = "User not found."
+        //        });
+        //    }
+
+        //    return Ok(user);
+        //}
     }
 }
