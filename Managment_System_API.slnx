@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="../Managment_System_API_Application/Managment_System_API_Application.csproj" />
+  <Project Path="../Managment_System_API_Domain/Managment_System_API_Domain.csproj" />
+  <Project Path="../Managment_System_API_Infrastructure/Managment_System_API_Infrastructure.csproj" />
+  <Project Path="Managment_System_API.csproj" />
+</Solution>

@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+
+		<!-- DAPPER -->
+		<PackageReference Include="Dapper" Version="2.1.79" />
+
+		<!-- OPENAPI -->
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+
+		<!-- SQL SERVER -->
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.0-preview2.26190.5" />
+
+		<!-- SWAGGER -->
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+
+		<!-- APPLICATION -->
+		<ProjectReference Include="..\Managment_System_API_Application\Managment_System_API_Application.csproj" />
+
+		<!-- INFRASTRUCTURE -->
+		<ProjectReference Include="..\Managment_System_API_Infrastructure\Managment_System_API_Infrastructure.csproj" />
+
+	</ItemGroup>
+
+</Project>
