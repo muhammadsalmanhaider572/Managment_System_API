@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Managment_System_API_Application.DTOs.Auth;
+using Managment_System_API_Application.Interfaces;
 using Managment_System_Application.DTOs.Auth;
 using Managment_System_Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Managment_System_API.Controllers;
 
@@ -15,10 +17,16 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+    // =====================================================
+    // LOGIN
+    // =====================================================
+
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login(
+        [FromBody] LoginRequest request)
     {
-        var result = await _authService.LoginAsync(request);
+        var result =
+            await _authService.LoginAsync(request);
 
         if (!result.Success)
         {
