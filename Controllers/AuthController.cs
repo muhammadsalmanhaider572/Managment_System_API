@@ -1,7 +1,6 @@
 ﻿using Managment_System_API_Application.DTOs.Auth;
 using Managment_System_API_Application.Interfaces;
-using Managment_System_Application.DTOs.Auth;
-using Managment_System_Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Managment_System_API.Controllers;
@@ -18,9 +17,10 @@ public class AuthController : ControllerBase
     }
 
     // =====================================================
-    // LOGIN
+    // POST: api/Auth/login
     // =====================================================
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login(
         [FromBody] LoginRequest request)

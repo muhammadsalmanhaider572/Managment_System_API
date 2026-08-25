@@ -1,8 +1,6 @@
 using Managment_System_API_Application.Interfaces;
 using Managment_System_API_Application.Services;
 using Managment_System_API_Infrastructure.Database;
-using Managment_System_Application.Interfaces;
-using Managment_System_Application.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -14,30 +12,46 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // =====================================================
-// 1. DATABASE / INFRASTRUCTURE
+// 1. DATABASE CONNECTION
 // =====================================================
 
-builder.Services.AddSingleton<IDbConnectionFactory, DapperContext>();
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException(
+        "DefaultConnection is missing in appsettings.json.");
 
 
 // =====================================================
-// 2. APPLICATION SERVICES
+// 2. DATABASE / DAPPER
+// =====================================================
+
+builder.Services.AddScoped<
+    IDbConnectionFactory,
+    DapperContext>();
+
+
+// =====================================================
+// 3. APPLICATION SERVICES
 // =====================================================
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IFileService, FileService>();
+
 
 // =====================================================
-// 3. CONTROLLERS
+// 4. CONTROLLERS
 // =====================================================
 
 builder.Services.AddControllers();
 
 
 // =====================================================
-// 4. JWT SETTINGS
+// 5. JWT SETTINGS
 // =====================================================
 
 var jwtSettings =
@@ -60,7 +74,7 @@ var jwtAudience =
 
 
 // =====================================================
-// 5. JWT AUTHENTICATION
+// 6. JWT AUTHENTICATION
 // =====================================================
 
 builder.Services
@@ -91,24 +105,20 @@ builder.Services
 
 
 // =====================================================
-// 6. AUTHORIZATION
+// 7. AUTHORIZATION
 // =====================================================
 
 builder.Services.AddAuthorization();
 
 
 // =====================================================
-// 7. SWAGGER
+// 8. SWAGGER
 // =====================================================
 
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    // =================================================
-    // SWAGGER DOCUMENT
-    // =================================================
-
     options.SwaggerDoc(
         "v1",
         new OpenApiInfo
@@ -123,7 +133,7 @@ builder.Services.AddSwaggerGen(options =>
 
 
     // =================================================
-    // JWT SECURITY DEFINITION
+    // JWT SECURITY
     // =================================================
 
     options.AddSecurityDefinition(
@@ -145,31 +155,28 @@ builder.Services.AddSwaggerGen(options =>
         });
 
 
-    // =================================================
-    // JWT SECURITY REQUIREMENT
-    // =================================================
-
     options.AddSecurityRequirement(
         document =>
             new OpenApiSecurityRequirement
             {
-                [new OpenApiSecuritySchemeReference(
-                    "Bearer",
-                    document)]
-                    = new List<string>()
+                [
+                    new OpenApiSecuritySchemeReference(
+                        "Bearer",
+                        document)
+                ] = []
             });
 });
 
 
 // =====================================================
-// 8. BUILD APPLICATION
+// 9. BUILD
 // =====================================================
 
 var app = builder.Build();
 
 
 // =====================================================
-// 9. SWAGGER MIDDLEWARE
+// 10. SWAGGER
 // =====================================================
 
 if (app.Environment.IsDevelopment())
@@ -182,46 +189,41 @@ if (app.Environment.IsDevelopment())
             "/swagger/v1/swagger.json",
             "Management System API v1");
 
-        // Swagger opens directly at:
-        //
-        // https://localhost:XXXX/
-        //
-
-        options.RoutePrefix = string.Empty;
+        options.RoutePrefix = "swagger";
     });
 }
 
 
 // =====================================================
-// 10. HTTPS
+// 11. HTTPS
 // =====================================================
 
 app.UseHttpsRedirection();
 
 
 // =====================================================
-// 11. AUTHENTICATION
+// 12. AUTHENTICATION
 // =====================================================
 
 app.UseAuthentication();
 
 
 // =====================================================
-// 12. AUTHORIZATION
+// 13. AUTHORIZATION
 // =====================================================
 
 app.UseAuthorization();
 
 
 // =====================================================
-// 13. CONTROLLERS
+// 14. CONTROLLERS
 // =====================================================
 
 app.MapControllers();
 
 
 // =====================================================
-// 14. RUN
+// 15. RUN
 // =====================================================
 
 app.Run();
