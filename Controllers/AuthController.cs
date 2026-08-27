@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     // POST: api/Auth/login
     // =====================================================
 
-    [AllowAnonymous]
+    [Authorize]
     [HttpPost("login")]
     public async Task<IActionResult> Login(
         [FromBody] LoginRequest request)
